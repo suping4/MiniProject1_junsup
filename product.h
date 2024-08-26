@@ -4,7 +4,7 @@
 #include <iostream>
 
 using namespace std;
-zcc
+
 class Product {
 public:
     Product(int id = 0, string name = "", string category = "", int price = 0, int quantity = 0);

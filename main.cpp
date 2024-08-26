@@ -4,112 +4,236 @@
 #include "product.h"
 #include "clientmanager.h"
 #include "productmanager.h"
+#include "cart.h"
+#include "order.h"
 
 using namespace std;
 
 void displayMainMenu() {
-    cout << "*** 쇼핑몰 프로그램 *****" << endl;
+    cout << "\n*** 쇼핑몰 프로그램 *****" << endl;
     cout << "1. 쇼핑몰" << endl;
     cout << "2. 고객 관리" << endl;
     cout << "3. 제품 관리" << endl;
     cout << "4. 프로그램 종료" << endl;
-    cout << "어떤 메뉴를 선택하시겠습니까? ";
+    cout << "메뉴를 선택하세요: ";
+}
+
+void displayShoppingMenu() {
+    cout << "\n*** 쇼핑몰 *****" << endl;
+    cout << "1. 제품 목록 보기" << endl;
+    cout << "2. 장바구니에 제품 추가" << endl;
+    cout << "3. 장바구니 보기" << endl;
+    cout << "4. 주문하기" << endl;
+    cout << "5. 로그아웃" << endl;
+    cout << "메뉴를 선택하세요: ";
 }
 
 void displayClientMenu() {
-    cout << "*** 고객 관리 *****" << endl;
-    cout << "1. 입력" << endl;
-    cout << "2. 수정" << endl;
-    cout << "3. 삭제" << endl;
-    cout << "4. 메인 메뉴로 돌아가기" << endl;
-    cout << "어떤 항목을 선택하시겠습니까? ";
+    cout << "\n*** 고객 관리 *****" << endl;
+    cout << "1. 고객 목록 보기" << endl;
+    cout << "2. 고객 추가" << endl;
+    cout << "3. 고객 정보 수정" << endl;
+    cout << "4. 고객 삭제" << endl;
+    cout << "5. 메인 메뉴로 돌아가기" << endl;
+    cout << "메뉴를 선택하세요: ";
 }
 
 void displayProductMenu() {
-    cout << "*** 제품 관리 *****" << endl;
-    cout << "1. 입력" << endl;
-    cout << "2. 수정" << endl;
-    cout << "3. 삭제" << endl;
-    cout << "4. 메인 메뉴로 돌아가기" << endl;
-    cout << "어떤 항목을 선택하시겠습니까? ";
+    cout << "\n*** 제품 관리 *****" << endl;
+    cout << "1. 제품 목록 보기" << endl;
+    cout << "2. 제품 추가" << endl;
+    cout << "3. 제품 정보 수정" << endl;
+    cout << "4. 제품 삭제" << endl;
+    cout << "5. 메인 메뉴로 돌아가기" << endl;
+    cout << "메뉴를 선택하세요: ";
+}
+
+Client* login(ClientManager& clientManager) {
+    string name, phoneNumber;
+    cout << "이름: ";
+    cin >> name;
+    cout << "전화번호: ";
+    cin >> phoneNumber;
+    
+    Client* client = clientManager.login(name, phoneNumber);
+    if (client) {
+        cout << "로그인 성공! 환영합니다, " << client->getName() << "님." << endl;
+    } else {
+        cout << "로그인 실패. 이름과 전화번호를 확인해주세요." << endl;
+    }
+    return client;
+}
+
+void handleShopping(ClientManager& clientManager, ProductManager& productManager) {
+    Client* currentClient = nullptr;
+    Cart cart;
+    int choice;
+
+    while (true) {
+        if (!currentClient) {
+            cout << "\n1. 로그인" << endl;
+            cout << "2. 회원가입" << endl;
+            cout << "3. 메인 메뉴로 돌아가기" << endl;
+            cout << "메뉴를 선택하세요: ";
+            cin >> choice;
+
+            switch (choice) {
+                case 1:
+                    currentClient = login(clientManager);
+                    if (!currentClient) continue;
+                    break;
+                case 2:
+                    clientManager.inputClient();
+                    cout << "회원가입이 완료되었습니다. 로그인해주세요." << endl;
+                    continue;
+                case 3:
+                    return;
+                default:
+                    cout << "잘못된 선택입니다." << endl;
+                    continue;
+            }
+        }
+
+        displayShoppingMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                productManager.displayProducts();
+                break;
+            case 2: {
+                int productId, quantity;
+                cout << "제품 ID: ";
+                cin >> productId;
+                cout << "수량: ";
+                cin >> quantity;
+                Product* product = productManager.search(productId);
+                if (product && productManager.checkProductAvailability(productId)) {
+                    cart.addItem(product, quantity);
+                    cout << "제품이 장바구니에 추가되었습니다." << endl;
+                } else {
+                    cout << "제품이 존재하지 않거나 재고가 부족합니다." << endl;
+                }
+                break;
+            }
+            case 3:
+                cart.displayCart();
+                break;
+            case 4:
+                if (cart.isEmpty()) {
+                    cout << "장바구니가 비어있습니다." << endl;
+                } else {
+                    Order order(currentClient->id(), cart);
+                    order.process(productManager);
+                    cart.clear();
+                }
+                break;
+            case 5:
+                cout << "로그아웃 되었습니다." << endl;
+                currentClient = nullptr;
+                cart.clear();
+                break;
+            default:
+                cout << "잘못된 선택입니다." << endl;
+        }
+    }
+}
+
+void handleClientManagement(ClientManager& clientManager) {
+    int choice;
+    while (true) {
+        displayClientMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                clientManager.displayInfo();
+                break;
+            case 2:
+                clientManager.inputClient();
+                break;
+            case 3: {
+                int clientId;
+                cout << "수정할 고객의 ID: ";
+                cin >> clientId;
+                clientManager.modifyClient(clientId);
+                break;
+            }
+            case 4: {
+                int clientId;
+                cout << "삭제할 고객의 ID: ";
+                cin >> clientId;
+                clientManager.deleteClient(clientId);
+                break;
+            }
+            case 5:
+                return;
+            default:
+                cout << "잘못된 선택입니다." << endl;
+        }
+    }
+}
+
+void handleProductManagement(ProductManager& productManager) {
+    int choice;
+    while (true) {
+        displayProductMenu();
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                productManager.displayProducts();
+                break;
+            case 2:
+                productManager.inputProduct();
+                break;
+            case 3: {
+                int productId;
+                cout << "수정할 제품의 ID: ";
+                cin >> productId;
+                productManager.modifyProduct(productId);
+                break;
+            }
+            case 4: {
+                int productId;
+                cout << "삭제할 제품의 ID: ";
+                cin >> productId;
+                productManager.deleteProduct(productId);
+                break;
+            }
+            case 5:
+                return;
+            default:
+                cout << "잘못된 선택입니다." << endl;
+        }
+    }
 }
 
 int main() {
     ClientManager clientManager;
     ProductManager productManager;
-    int mainChoice, subChoice;
+    int choice;
 
     while (true) {
         displayMainMenu();
-        cin >> mainChoice;
+        cin >> choice;
 
-        switch (mainChoice) {
+        switch (choice) {
             case 1:
-                cout << "쇼핑몰 기능은 아직 구현되지 않았습니다." << endl;
+                handleShopping(clientManager, productManager);
                 break;
             case 2:
-                while (true) {
-                    displayClientMenu();
-                    cin >> subChoice;
-                    switch (subChoice) {
-                        case 1:
-                            clientManager.inputClient();
-                            break;
-                        case 2:
-                            clientManager.displayInfo();
-                            int clientId;
-                            cout << "수정할 고객의 ID를 입력하세요: ";
-                            cin >> clientId;
-                            clientManager.modifyClient(clientId);
-                            break;
-                        case 3:
-                            clientManager.displayInfo();
-                            cout << "삭제할 고객의 ID를 입력하세요: ";
-                            cin >> clientId;
-                            clientManager.deleteClient(clientId);
-                            break;
-                        case 4:
-                            goto main_menu;
-                        default:
-                            cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
-                    }
-                }
+                handleClientManagement(clientManager);
                 break;
             case 3:
-                while (true) {
-                    displayProductMenu();
-                    cin >> subChoice;
-                    switch (subChoice) {
-                        case 1:
-                            productManager.inputProduct();
-                            break;
-                        case 2:
-                            productManager.displayProducts();
-                            int productId;
-                            cout << "수정할 제품의 ID를 입력하세요: ";
-                            cin >> productId;
-                            productManager.modifyProduct(productId);
-                            break;
-                        case 3:
-                            productManager.displayProducts();
-                            cout << "삭제할 제품의 ID를 입력하세요: ";
-                            cin >> productId;
-                            productManager.deleteProduct(productId);
-                            break;
-                        case 4:
-                            goto main_menu;
-                        default:
-                            cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
-                    }
-                }
+                handleProductManagement(productManager);
                 break;
             case 4:
                 cout << "프로그램을 종료합니다." << endl;
                 return 0;
             default:
-                cout << "잘못된 선택입니다. 다시 선택해주세요." << endl;
+                cout << "잘못된 선택입니다." << endl;
         }
-        main_menu:;
     }
 
     return 0;

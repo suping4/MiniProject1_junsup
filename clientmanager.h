@@ -16,6 +16,7 @@ class ClientManager {
       void addClient(Client*);
       void deleteClient(int);
       void modifyClient(int);
+      Client* login(const string& name, const string& phoneNumber);
       Client* search(int);
       int makeId();
       void displayInfo();

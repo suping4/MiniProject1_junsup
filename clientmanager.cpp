@@ -108,6 +108,15 @@ int ClientManager::makeId( )
         return ++id;
     }
 }
+Client* ClientManager::login(const string& name, const string& phoneNumber) {
+    for (const auto& pair : clientList) {
+        Client* client = pair.second;
+        if (client->getName() == name && client->getPhoneNumber() == phoneNumber) {
+            return client;
+        }
+    }
+    return nullptr;
+}
 
 vector<string> ClientManager::parseCSV(istream &file, char delimiter)
 {
