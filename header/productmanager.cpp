@@ -43,10 +43,10 @@ void ProductManager::inputProduct()
 {
     string name, category;
     int price, quantity;
-    cout << "name : "; cin >> name;
-    cout << "category : "; cin >> category;
-    cout << "price : "; cin >> price;
-    cout << "quantity : "; cin >> quantity;
+    cout << "품명 : "; cin >> name;
+    cout << "카테고리 : "; cin >> category;
+    cout << "가격 : "; cin >> price;
+    cout << "수량 : "; cin >> quantity;
 
     int id = makeId();
     Product* p = new Product(id, name, category, price, quantity);
@@ -66,7 +66,7 @@ void ProductManager::deleteProduct(int id)
 void ProductManager::modifyProduct(int id)
 {
     Product* p = search(id);
-    cout << "  ID  |     Name     | Category | Price | Quantity" << endl;
+    cout << "  ID  |     품명     |   카테고리   |  가격 |  수량" << endl;
     cout << setw(5) << setfill('0') << right << p->id() << " | " << left;
     cout << setw(12) << setfill(' ') << p->getName() << " | ";
     cout << setw(12) << p->getCategory() << " | ";
@@ -75,10 +75,10 @@ void ProductManager::modifyProduct(int id)
 
     string name, category;
     int price, quantity;
-    cout << "name : "; cin >> name;
-    cout << "category : "; cin >> category;
-    cout << "price : "; cin >> price;
-    cout << "quantity : "; cin >> quantity;
+    cout << "품명 : "; cin >> name;
+    cout << "카테고리 : "; cin >> category;
+    cout << "가격 : "; cin >> price;
+    cout << "수량 : "; cin >> quantity;
 
     p->setName(name);
     p->setCategory(category);
@@ -88,7 +88,7 @@ void ProductManager::modifyProduct(int id)
 
 void ProductManager::displayProducts()
 {
-    cout << endl << "  ID  |     Name     | Category | Price | Quantity" << endl;
+    cout << endl << "  ID  |     품명     |   카테고리   |  가격 |  수량" << endl;
     for (const auto& v : productList) {
         Product* p = v.second;
         cout << setw(5) << setfill('0') << right << p->id() << " | " << left;
@@ -99,9 +99,8 @@ void ProductManager::displayProducts()
     }
 }
 
-void ProductManager::getProductByCategory(string category)
-{
-    cout << endl << "  ID  |     Name     | Category | Price | Quantity" << endl;
+void ProductManager::getProductByCategory(string category) {
+    cout << endl << "  ID  |     품명     |   카테고리   |  가격 |  수량" << endl;
     for (const auto& v : productList) {
         Product* p = v.second;
         if (p->getCategory() == category) {
@@ -114,9 +113,8 @@ void ProductManager::getProductByCategory(string category)
     }
 }
 
-void ProductManager::getProductByPrice(int price)
-{
-    cout << endl << "  ID  |     Name     | Category | Price | Quantity" << endl;
+void ProductManager::getProductByPrice(int price) {
+    cout << endl << "  ID  |     품명     |   카테고리   |  가격 |  수량" << endl;
     for (const auto& v : productList) {
         Product* p = v.second;
         if (p->getPrice() == price) {
@@ -129,17 +127,24 @@ void ProductManager::getProductByPrice(int price)
     }
 }
 
-void ProductManager::updateProductQuantity(int id, int quantity)
-{
+void ProductManager::updateProductQuantity(int id, int quantity) {
     Product* p = search(id);
-    p->setQuantity(quantity);
+    if (p != nullptr) {
+        p->setQuantity(quantity);
+        cout << "제품 수량이 업데이트되었습니다." << endl;
+    } else {
+        cout << "해당 ID의 제품을 찾을 수 없습니다." << endl;
+    }
 }
 
-bool ProductManager::checkProductAvailability(int id)
-{
+bool ProductManager::checkProductAvailability(int id) {
     Product* p = search(id);
-    return p->getQuantity() > 0;
+    if (p != nullptr) {
+        return p->getQuantity() > 0;
+    }
+    return false;
 }
+
 
 int ProductManager::makeId()
 {
@@ -173,91 +178,4 @@ vector<string> ProductManager::parseCSV(istream& file, char delimiter)
         }
     }
     return row;
-}
-
-bool ProductManager::displayMenu()
-{
-    int ch, key;
-    string category;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "              Product Manager                 " << endl;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << "  1. Display Product List                     " << endl;
-    cout << "  2. Input Product                            " << endl;
-    cout << "  3. Delete Product                           " << endl;
-    cout << "  4. Modify Product                           " << endl;
-    cout << "  5. Search Product by Category               " << endl;
-    cout << "  6. Search Product by Price                  " << endl;
-    cout << "  7. Update Product Quantity                  " << endl;
-    cout << "  8. Check Product Availability               " << endl;
-    cout << "  9. Quit this Program                        " << endl;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
-    cout << " What do you wanna do? ";
-    cin >> ch;
-    switch (ch) {
-        case 1:
-            displayProducts();
-            cin.ignore();
-            getchar();
-            break;
-        case 2:
-            inputProduct();
-            break;
-        case 3:
-            displayProducts();
-            cout << "   Choose Key : ";
-            cin >> key;
-            deleteProduct(key);
-            break;
-        case 4:
-            displayProducts();
-            cout << "   Choose Key : ";
-            cin >> key;
-            modifyProduct(key);
-            break;
-        case 5:
-            cout << "   Enter Category : ";
-            cin >> category;
-            getProductByCategory(category);
-            cin.ignore();
-            getchar();
-            break;
-        case 6:
-            cout << "   Enter Price : ";
-            int price;
-            cin >> price;
-            getProductByPrice(price);
-            cin.ignore();
-            getchar();
-            break;
-        case 7:
-            displayProducts();
-            cout << "   Choose Key : ";
-            cin >> key;
-            cout << "   Enter Quantity : ";
-            int quantity;
-            cin >> quantity;
-            updateProductQuantity(key, quantity);
-            break;
-        case 8:
-            displayProducts();
-            cout << "   Choose Key : ";
-            cin >> key;
-            if (checkProductAvailability(key)) {
-                cout << "   Product is available." << endl;
-            } else {
-                cout << "   Product is not available." << endl;
-            }
-            cin.ignore();
-            getchar();
-            break;
-        case 9:
-            return false;
-        default:
-            displayProducts();
-            cin.ignore();
-            getchar();
-            break;
-    }
-    return true;
 }
