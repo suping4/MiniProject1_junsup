@@ -10,6 +10,7 @@
 using namespace std;
 
 void displayMainMenu() {
+    cout << "\033[2J\033[1;1H";
     cout << "\n*********  쇼핑몰 프로그램  *********" << endl;
     cout << "  1. 쇼핑몰" << endl;
     cout << "  2. 고객 관리" << endl;
@@ -20,6 +21,7 @@ void displayMainMenu() {
 }
 
 void displayShoppingMenu() {
+    cout << "\033[2J\033[1;1H";
     cout << "\n**********    쇼핑몰    **********" << endl;
     cout << "  1. 제품 목록 보기" << endl;
     cout << "  2. 장바구니에 제품 추가" << endl;
@@ -31,6 +33,7 @@ void displayShoppingMenu() {
 }
 
 void displayClientMenu() {
+    cout << "\033[2J\033[1;1H";
     cout << "\n**********    고객 관리    **********" << endl;
     cout << "  1. 고객 목록 보기" << endl;
     cout << "  2. 고객 추가" << endl;
@@ -42,6 +45,7 @@ void displayClientMenu() {
 }
 
 void displayProductMenu() {
+    cout << "\033[2J\033[1;1H";
     cout << "\n**********    제품 관리    **********" << endl;
     cout << "  1. 제품 목록 보기" << endl;
     cout << "  2. 제품 추가" << endl;
@@ -109,6 +113,8 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
         switch (choice) {
             case 1:
                 productManager.displayProducts();
+                cin.ignore();
+                getchar();
                 break;
             case 2: {
                 int productId, quantity;
@@ -127,6 +133,8 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
             }
             case 3:
                 cart.displayCart();
+                cin.ignore();
+                getchar();
                 break;
             case 4:
                 if (cart.isEmpty()) {
@@ -157,6 +165,8 @@ void handleClientManagement(ClientManager& clientManager) {
         switch (choice) {
             case 1:
                 clientManager.displayInfo();
+                cin.ignore();
+                getchar();
                 break;
             case 2:
                 clientManager.inputClient();
@@ -192,6 +202,8 @@ void handleProductManagement(ProductManager& productManager) {
         switch (choice) {
             case 1:
                 productManager.displayProducts();
+                cin.ignore();
+                getchar();
                 break;
             case 2:
                 productManager.inputProduct();
