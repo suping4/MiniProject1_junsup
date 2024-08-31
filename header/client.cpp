@@ -44,7 +44,6 @@ int Client::id() const
     return m_id;
 }
 
-// Define copy assignment operator.
 bool Client::operator==(const Client &other) const {
     return (this->m_name == other.m_name);
 }
