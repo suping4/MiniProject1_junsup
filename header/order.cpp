@@ -14,7 +14,7 @@ Order::Order(int clientId, const Cart& cart)
       totalAmount(0) {         // 총 주문 금액을 초기화
     // 총 주문 금액 계산
     for (const auto& item : items) {
-        totalAmount += item.second.first->getPrice() * item.second.second;
+        totalAmount += item.second.first->getPrice() * item.second.second;  
     }
 }
 

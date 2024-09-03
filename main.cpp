@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <limits>
 #include "client.h"
 #include "product.h"
 #include "clientmanager.h"
@@ -10,7 +11,6 @@
 using namespace std;
 
 void displayMainMenu() {
-    cout << "\033[2J\033[1;1H";
     cout << "\n*********  쇼핑몰 프로그램  *********" << endl;
     cout << "  1. 쇼핑몰" << endl;
     cout << "  2. 고객 관리" << endl;
@@ -21,7 +21,6 @@ void displayMainMenu() {
 }
 
 void displayShoppingMenu() {
-    cout << "\033[2J\033[1;1H";
     cout << "\n**********    쇼핑몰    **********" << endl;
     cout << "  1. 제품 목록 보기" << endl;
     cout << "  2. 장바구니에 제품 추가" << endl;
@@ -33,7 +32,6 @@ void displayShoppingMenu() {
 }
 
 void displayClientMenu() {
-    cout << "\033[2J\033[1;1H";
     cout << "\n**********    고객 관리    **********" << endl;
     cout << "  1. 고객 목록 보기" << endl;
     cout << "  2. 고객 추가" << endl;
@@ -45,7 +43,6 @@ void displayClientMenu() {
 }
 
 void displayProductMenu() {
-    cout << "\033[2J\033[1;1H";
     cout << "\n**********    제품 관리    **********" << endl;
     cout << "  1. 제품 목록 보기" << endl;
     cout << "  2. 제품 추가" << endl;
@@ -58,6 +55,19 @@ void displayProductMenu() {
     cout << "  9. 메인 메뉴로 돌아가기" << endl;
     cout << "************************************" << endl;
     cout << "원하는 작업을 선택하세요: ";
+}
+
+int getValidInput(int min, int max) {
+    int choice;
+    while (true) {
+        if (cin >> choice && choice >= min && choice <= max) {
+            return choice;
+        } else {
+            cout << "잘못된 입력입니다. " << min << "에서 " << max << " 사이의 숫자를 입력하세요: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
 }
 
 Client* login(ClientManager& clientManager) {
@@ -87,7 +97,7 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
             cout << "2. 회원가입" << endl;
             cout << "3. 메인 메뉴로 돌아가기" << endl;
             cout << "메뉴를 선택하세요: ";
-            cin >> choice;
+            choice = getValidInput(1, 3);
 
             switch (choice) {
                 case 1:
@@ -101,27 +111,22 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
                     continue;
                 case 3:
                     return;
-                default:
-                    cout << "잘못된 선택입니다." << endl;
-                    continue;
             }
         }
 
         displayShoppingMenu();
-        cin >> choice;
+        choice = getValidInput(1, 5);
 
         switch (choice) {
             case 1:
                 productManager.displayProducts();
-                cin.ignore();
-                getchar();
                 break;
             case 2: {
                 int productId, quantity;
                 cout << "제품 ID: ";
-                cin >> productId;
+                productId = getValidInput(1, numeric_limits<int>::max());
                 cout << "수량: ";
-                cin >> quantity;
+                quantity = getValidInput(1, numeric_limits<int>::max());
                 Product* product = productManager.search(productId);
                 if (product && productManager.checkProductAvailability(productId)) {
                     cart.addItem(product, quantity);
@@ -133,8 +138,6 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
             }
             case 3:
                 cart.displayCart();
-                cin.ignore();
-                getchar();
                 break;
             case 4:
                 if (cart.isEmpty()) {
@@ -150,8 +153,6 @@ void handleShopping(ClientManager& clientManager, ProductManager& productManager
                 currentClient = nullptr;
                 cart.clear();
                 break;
-            default:
-                cout << "잘못된 선택입니다." << endl;
         }
     }
 }
@@ -160,13 +161,11 @@ void handleClientManagement(ClientManager& clientManager) {
     int choice;
     while (true) {
         displayClientMenu();
-        cin >> choice;
+        choice = getValidInput(1, 5);
 
         switch (choice) {
             case 1:
                 clientManager.displayInfo();
-                cin.ignore();
-                getchar();
                 break;
             case 2:
                 clientManager.inputClient();
@@ -174,21 +173,19 @@ void handleClientManagement(ClientManager& clientManager) {
             case 3: {
                 int clientId;
                 cout << "수정할 고객의 ID: ";
-                cin >> clientId;
+                clientId = getValidInput(1, numeric_limits<int>::max());
                 clientManager.modifyClient(clientId);
                 break;
             }
             case 4: {
                 int clientId;
                 cout << "삭제할 고객의 ID: ";
-                cin >> clientId;
+                clientId = getValidInput(1, numeric_limits<int>::max());
                 clientManager.deleteClient(clientId);
                 break;
             }
             case 5:
                 return;
-            default:
-                cout << "잘못된 선택입니다." << endl;
         }
     }
 }
@@ -197,13 +194,11 @@ void handleProductManagement(ProductManager& productManager) {
     int choice;
     while (true) {
         displayProductMenu();
-        cin >> choice;
+        choice = getValidInput(1, 9);
 
         switch (choice) {
             case 1:
                 productManager.displayProducts();
-                cin.ignore();
-                getchar();
                 break;
             case 2:
                 productManager.inputProduct();
@@ -211,14 +206,14 @@ void handleProductManagement(ProductManager& productManager) {
             case 3: {
                 int productId;
                 cout << "삭제할 제품의 ID: ";
-                cin >> productId;
+                productId = getValidInput(1, numeric_limits<int>::max());
                 productManager.deleteProduct(productId);
                 break;
             }
             case 4: {
                 int productId;
                 cout << "수정할 제품의 ID: ";
-                cin >> productId;
+                productId = getValidInput(1, numeric_limits<int>::max());
                 productManager.modifyProduct(productId);
                 break;
             }
@@ -232,23 +227,23 @@ void handleProductManagement(ProductManager& productManager) {
             case 6: {
                 int price;
                 cout << "검색할 가격: ";
-                cin >> price;
+                price = getValidInput(0, numeric_limits<int>::max());
                 productManager.getProductByPrice(price);
                 break;
             }
             case 7: {
                 int productId, quantity;
                 cout << "수량을 업데이트할 제품의 ID: ";
-                cin >> productId;
+                productId = getValidInput(1, numeric_limits<int>::max());
                 cout << "새로운 수량: ";
-                cin >> quantity;
+                quantity = getValidInput(0, numeric_limits<int>::max());
                 productManager.updateProductQuantity(productId, quantity);
                 break;
             }
             case 8: {
                 int productId;
                 cout << "재고를 확인할 제품의 ID: ";
-                cin >> productId;
+                productId = getValidInput(1, numeric_limits<int>::max());
                 if (productManager.checkProductAvailability(productId)) {
                     cout << "제품이 재고에 있습니다." << endl;
                 } else {
@@ -258,12 +253,9 @@ void handleProductManagement(ProductManager& productManager) {
             }
             case 9:
                 return;
-            default:
-                cout << "잘못된 선택입니다." << endl;
         }
     }
 }
-
 
 int main() {
     ClientManager clientManager;
@@ -272,7 +264,7 @@ int main() {
 
     while (true) {
         displayMainMenu();
-        cin >> choice;
+        choice = getValidInput(1, 4);
 
         switch (choice) {
             case 1:
@@ -287,8 +279,6 @@ int main() {
             case 4:
                 cout << "프로그램을 종료합니다." << endl;
                 return 0;
-            default:
-                cout << "잘못된 선택입니다." << endl;
         }
     }
 
