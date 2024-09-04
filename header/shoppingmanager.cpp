@@ -21,8 +21,8 @@ void ShoppingManager::pauseScreen() {
 
 void ShoppingManager::displayMainMenu() {
     clearScreen();
-    cout << "\033[1;36m********* 쇼핑몰 프로그램 *********\033[0m" << endl;
-    cout << "\033[1;33m1. 쇼핑몰\033[0m" << endl;
+    cout << "\033[1;36m*********      섭  팡      *********\033[0m" << endl;
+    cout << "\033[1;33m1. 쇼핑하기\033[0m" << endl;
     cout << "\033[1;33m2. 고객 관리\033[0m" << endl;
     cout << "\033[1;33m3. 제품 관리\033[0m" << endl;
     cout << "\033[1;33m4. 프로그램 종료\033[0m" << endl;
@@ -32,7 +32,7 @@ void ShoppingManager::displayMainMenu() {
 
 void ShoppingManager::displayShoppingMenu() {
     clearScreen();
-    cout << "\033[1;36m********** 쇼핑몰 **********\033[0m" << endl;
+    cout << "\033[1;36m**********    당일배송 쇼핑   **********\033[0m" << endl;
     cout << "\033[1;33m1. 제품 목록 보기\033[0m" << endl;
     cout << "\033[1;33m2. 장바구니에 제품 추가\033[0m" << endl;
     cout << "\033[1;33m3. 장바구니 보기\033[0m" << endl;
@@ -44,7 +44,7 @@ void ShoppingManager::displayShoppingMenu() {
 
 void ShoppingManager::displayClientMenu() {
     clearScreen();
-    cout << "\033[1;36m********** 고객 관리 **********\033[0m" << endl;
+    cout << "\033[1;36m**********    고객 관리    **********\033[0m" << endl;
     cout << "\033[1;33m1. 고객 목록 보기\033[0m" << endl;
     cout << "\033[1;33m2. 고객 추가\033[0m" << endl;
     cout << "\033[1;33m3. 고객 정보 수정\033[0m" << endl;
@@ -56,7 +56,7 @@ void ShoppingManager::displayClientMenu() {
 
 void ShoppingManager::displayProductMenu() {
     clearScreen();
-    cout << "\033[1;36m********** 제품 관리 **********\033[0m" << endl;
+    cout << "\033[1;36m**********    제품 관리    **********\033[0m" << endl;
     cout << "\033[1;33m1. 제품 목록 보기\033[0m" << endl;
     cout << "\033[1;33m2. 제품 추가\033[0m" << endl;
     cout << "\033[1;33m3. 제품 삭제\033[0m" << endl;
