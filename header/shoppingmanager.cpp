@@ -136,7 +136,7 @@ void ShoppingManager::handleShopping() {
             case 2: {
                 int productId, quantity;
                 cout << "\033[1;34m제품 ID: \033[0m";
-                productId = getValidInput(1, numeric_limits<int>::max());
+                productId = getValidInput(0, numeric_limits<int>::max());
                 cout << "\033[1;34m수량: \033[0m";
                 quantity = getValidInput(1, numeric_limits<int>::max());
                 Product* product = productManager.search(productId);
@@ -191,7 +191,7 @@ void ShoppingManager::handleClientManagement() {
             case 3: {
                 int clientId;
                 cout << "\033[1;34m수정할 고객의 ID: \033[0m";
-                clientId = getValidInput(1, numeric_limits<int>::max());
+                clientId = getValidInput(0, numeric_limits<int>::max());
                 clientManager.modifyClient(clientId);
                 cout << "\033[1;32m고객 정보가 수정되었습니다.\033[0m" << endl;
                 pauseScreen();
@@ -200,7 +200,7 @@ void ShoppingManager::handleClientManagement() {
             case 4: {
                 int clientId;
                 cout << "\033[1;34m삭제할 고객의 ID: \033[0m";
-                clientId = getValidInput(1, numeric_limits<int>::max());
+                clientId = getValidInput(0, numeric_limits<int>::max());
                 clientManager.deleteClient(clientId);
                 cout << "\033[1;32m고객이 삭제되었습니다.\033[0m" << endl;
                 pauseScreen();
@@ -230,7 +230,7 @@ void ShoppingManager::handleProductManagement() {
             case 3: {
                 int productId;
                 cout << "\033[1;34m삭제할 제품의 ID: \033[0m";
-                productId = getValidInput(1, numeric_limits<int>::max());
+                productId = getValidInput(0, numeric_limits<int>::max());
                 productManager.deleteProduct(productId);
                 cout << "\033[1;32m제품이 삭제되었습니다.\033[0m" << endl;
                 pauseScreen();
@@ -264,7 +264,7 @@ void ShoppingManager::handleProductManagement() {
             case 7: {
                 int productId, quantity;
                 cout << "\033[1;34m수량을 업데이트할 제품의 ID: \033[0m";
-                productId = getValidInput(1, numeric_limits<int>::max());
+                productId = getValidInput(0, numeric_limits<int>::max());
                 cout << "\033[1;34m새로운 수량: \033[0m";
                 quantity = getValidInput(0, numeric_limits<int>::max());
                 productManager.updateProductQuantity(productId, quantity);
