@@ -6,6 +6,6 @@
 ## 각 클래스별 기능
 <img width="827" alt="image" src="https://github.com/user-attachments/assets/663fd89a-0685-4187-8a79-4464b073c6da">
 
-## main
+## main구조
 ![image](https://github.com/user-attachments/assets/cf60d9a4-64cd-4a79-bf32-0835b3c620fd)
 
