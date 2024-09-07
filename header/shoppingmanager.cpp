@@ -72,7 +72,7 @@ void ShoppingManager::displayProductMenu() {
 
 int ShoppingManager::getValidInput(int min, int max) {
     int choice;
-    while (true) {
+    while (1) {
         if (cin >> choice && choice >= min && choice <= max) {
             return choice;
         } else {
@@ -101,7 +101,7 @@ Client* ShoppingManager::login() {
 
 void ShoppingManager::handleShopping() {
     int choice;
-    while (true) {
+    while (1) {
         if (!currentClient) {
             clearScreen();
             cout << "\033[1;36m1. 로그인\033[0m" << endl;
@@ -175,7 +175,7 @@ void ShoppingManager::handleShopping() {
 
 void ShoppingManager::handleClientManagement() {
     int choice;
-    while (true) {
+    while (1) {
         displayClientMenu();
         choice = getValidInput(1, 5);
         switch (choice) {
@@ -214,7 +214,7 @@ void ShoppingManager::handleClientManagement() {
 
 void ShoppingManager::handleProductManagement() {
     int choice;
-    while (true) {
+    while (1) {
         displayProductMenu();
         choice = getValidInput(1, 9);
         switch (choice) {
@@ -292,7 +292,7 @@ void ShoppingManager::handleProductManagement() {
 
 void ShoppingManager::run() {
     int choice;
-    while (true) {
+    while (1) {
         displayMainMenu();
         choice = getValidInput(1, 4);
         switch (choice) {
